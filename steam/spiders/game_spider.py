@@ -26,5 +26,6 @@ class game_spider(CrawlSpider):
 
     def parse_product(self, response):
         return {
-            'app_name': response.css('.apphub_AppName ::text').extract_first()
+            'app_name': response.css('.apphub_AppName ::text').extract_first(),
+            'specs': response.css('.game_area_details_specs a ::text').extract()
         }
