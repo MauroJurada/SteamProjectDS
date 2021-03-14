@@ -1,7 +1,9 @@
 import scrapy
 import pandas as pd
 
-from ..items import SteamItem, GamesItemLoader
+import re
+
+from w3lib.url import canonicalize_url, url_query_cleaner
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -24,5 +26,5 @@ class game_spider(CrawlSpider):
 
     def parse_product(self, response):
         return {
-            'app_name': response.css('.apphub_AppName ::text').extract_first(),
+            'app_name': response.css('.apphub_AppName ::text').extract_first()
         }
