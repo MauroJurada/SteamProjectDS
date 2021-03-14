@@ -18,7 +18,7 @@ class game_spider(CrawlSpider):
         #Every steam game page follows this rule: https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/
         Rule(LinkExtractor(allow='/app/(.+)/',
                            restrict_css='#search_result_container'),
-             callback='parse_item'),
+             callback='parse_product'),
         Rule(LinkExtractor(allow='page=(d+)',
                            restrict_css='.search_pagination_right')
              )
