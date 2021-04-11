@@ -1,16 +1,13 @@
 import scrapy
 import pandas as pd
-
 import re
-
 from w3lib.url import canonicalize_url, url_query_cleaner
-
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-
+from datetime import datetime
 
 def cleanup(response):
-    return response.replace("\t", "").replace("\r", "").replace("\n", "")
+    return response.replace("\t", "").replace("\r", "").replace("\n", "").replace("\u20ac", "")
 
 
 class game_spider(CrawlSpider):
@@ -46,6 +43,8 @@ class game_spider(CrawlSpider):
         for i in tags:
             clean_tags.append(cleanup(i))
 
+        minimum_sys_req = response.css('.game_area_sys_req_leftCol').extract()
+        recommended_sys_req = response.css('.game_area_sys_req_rightCol').extract()
 
         return {
             'id': re.findall('/app/(.*?)/', response.url),
@@ -55,7 +54,10 @@ class game_spider(CrawlSpider):
             'tags': clean_tags,
             'price': price,
             'early_access': early_access,
+            'release_date': response.css('.date ::text').extract(),
             'rating': response.css('.game_review_summary').xpath('../*[@itemprop="description"]/text()').extract(),
-            # 'amount_of_ratings': ,
-
+            'review_count': response.css('.nonresponsive_hidden').xpath('../*[@itemprop="reviewCount"]/@content').extract(),
+            'minimum_sys_req': minimum_sys_req,
+            'recommended_sys_req': recommended_sys_req,
+            'date_scraped': datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
         }
