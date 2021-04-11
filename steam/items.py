@@ -15,6 +15,7 @@ class SteamItem(scrapy.Item):
     id = scrapy.Field()
     url = scrapy.Field()
     app_name = scrapy.Field()
+    developer = scrapy.Field()
     tags = scrapy.Field()
     price = scrapy.Field()
     early_access = scrapy.Field()
